@@ -1,0 +1,43 @@
+import Jetson.GPIO as GPIO
+import time
+
+# Pin Definitions
+gpio_pin = 16  #I2S0_DIN BOARD GPIO 38
+
+# 2 I2S0_DIN 38
+# 3 I2S0_DOUT 40
+# 4 I2DS0_FS 35
+# 5 I2S0_SCLK 12
+# 6 SPI1_SCK 13
+# 7 SPI1_MISO 22
+# 8 SPI1_MOSI 37
+# 9 SPI1_CS0 18
+# 10 SPI1_CS1 16
+
+def main():
+    # Pin Setup:
+    GPIO.setmode(GPIO.BOARD)  # BCM pin-numbering scheme
+    # GPIO.setmode(GPIO.TEGRA_SOC)
+    # GPIO.setmode(GPIO.BCM)
+    # set pin as an output pin with optional initial state of HIGH
+    
+    GPIO.setup(gpio_pin, GPIO.OUT)
+
+    print("Press CTRL+C to exit")
+    curr_value = GPIO.HIGH
+    try:
+        while True:
+            time.sleep(1)
+            # Toggle the output every second
+            print("Outputting {} to pin {}".format(curr_value, gpio_pin))
+            GPIO.output(gpio_pin, curr_value)
+            curr_value ^= GPIO.HIGH
+    finally:
+        GPIO.output(gpio_pin, False)
+        GPIO.cleanup()
+
+
+if __name__ == '__main__':
+    main()
+
+
